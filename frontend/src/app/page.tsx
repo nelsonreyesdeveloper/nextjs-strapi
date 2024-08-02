@@ -1,34 +1,25 @@
-import AxiosInstance from "@/axios/AxiosInstance";
-import FullWidthLayout from "@/components/FullWidthLayout";
-
-async function getStrapiData(path: string) {
-  const baseurl = process.env.NEXT_PUBLIC_API_URL;
-  try {
-    const response = await AxiosInstance.get(`${path}`);
-    const data = await response.data;
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
-}
+import { HeroSectionProps } from "@/components/custom/HeroSection";
+import { blockRenderer, getHomePageData } from "@/data/loaders";
 
 export default async function Home() {
-  const strapiData = await getStrapiData("/api/home-page");
-  const { title, description, layout } = strapiData.data.attributes;
+  const { layout, blocks } = await getHomePageData();
+
+  if (!blocks)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <h1 className="text-3xl font-bold text-center">No data found</h1>
+      </div>
+    );
 
   return (
     <>
-      {layout === "full_width" ? (
-        <FullWidthLayout>
-          <h1>{title}</h1>
-          <p>{description}</p>
-        </FullWidthLayout>
-      ) : (
-        <div>
-          <h1>{title}</h1>
-          <p>{description}</p>
-        </div>
-      )}
+      <div
+        className={`${
+          layout === "full_width" ? "w-full" : "w-[1140px] mx-auto"
+        } `}
+      >
+        {blocks.map((block: HeroSectionProps) => blockRenderer(block))}
+      </div>
     </>
   );
 }

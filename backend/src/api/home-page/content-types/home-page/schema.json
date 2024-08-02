@@ -21,7 +21,15 @@
     "layout": {
       "type": "enumeration",
       "enum": [
-        "full_width"
+        "full_width",
+        "boxed"
+      ]
+    },
+    "blocks": {
+      "type": "dynamiczone",
+      "components": [
+        "layout.hero-section",
+        "layout.features"
       ]
     }
   }
